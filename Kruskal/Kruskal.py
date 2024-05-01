@@ -1,5 +1,3 @@
-import heapq
-
 kruskalFile = open('kruskal.txt', 'r')
 kruskalNumEdges = int(kruskalFile.readline())
 kruskaEdgesWeight = [float(x) for x in kruskalFile.read().split()]
