@@ -26,31 +26,32 @@ def sortEdges(matrix):
     return sortedEdges
 
 def makeSet(numEdges):
-    sets = [[] * numEdges for i in range(numEdges)]
     belongsTo = []
     for i in range(numEdges):
-        sets[i].append(i)
         belongsTo.append(i)
-    return sets, belongsTo
+
+    print("BELONGS TO: ", belongsTo)
+    return belongsTo
 
 def findSet(belongsTo, edge):
+    print("FIND SET: ", belongsTo[edge])
     return belongsTo[edge]
 
 def union(belongsTo, edge1, edge2):
     belongsTo[edge1] = edge2
+    print("UNION: ", belongsTo)
 
 def kruskal(numEdges, vectorEdgesWeight):
     A = []
     adjustedMatrix = adjustMatrix(vectorEdgesWeight)
     sortedEdges = sortEdges(adjustedMatrix)
-    sets, belongsTo = makeSet(numEdges)
+    belongsTo = makeSet(numEdges)
 
     for edge in sortedEdges:
+        print("EDGE: ", edge)
         if(findSet(belongsTo, edge[1]) != findSet(belongsTo, edge[2])):
             A.append(edge)
             union(belongsTo, findSet(belongsTo, edge[1]), findSet(belongsTo, edge[2]))
-
-    
     return A
     
 
