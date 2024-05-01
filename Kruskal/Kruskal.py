@@ -49,7 +49,12 @@ def kruskal(numEdges, vectorEdgesWeight):
         if(findSet(belongsTo, edge[1]) != findSet(belongsTo, edge[2])):
             A.append(edge)
             union(belongsTo, findSet(belongsTo, edge[1]), findSet(belongsTo, edge[2]))
-    return A
-    
+        
+
+    print(belongsTo)
+    if(all(element == belongsTo[0] for element in belongsTo)):
+        return True, A
+    else:
+        return False
 
 print(kruskal(kruskalNumEdges, kruskaEdgesWeight))
