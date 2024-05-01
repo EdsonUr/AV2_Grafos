@@ -35,9 +35,11 @@ def findSet(belongsTo, edge):
     return belongsTo[edge]
 
 def union(belongsTo, edge1, edge2):
-    belongsTo[edge1] = edge2
+    for i in range(len(belongsTo)):
+        if belongsTo[i] == edge1:
+            belongsTo[i] = edge2
     print("UNION: ", belongsTo)
-
+    
 def kruskal(numEdges, vectorEdgesWeight):
     A = []
     adjustedMatrix = adjustMatrix(vectorEdgesWeight)
@@ -50,9 +52,8 @@ def kruskal(numEdges, vectorEdgesWeight):
             A.append(edge)
             union(belongsTo, findSet(belongsTo, edge[1]), findSet(belongsTo, edge[2]))
         
-
     print(belongsTo)
-    if(all(element == belongsTo[0] for element in belongsTo)):
+    if (len(set(belongsTo)) == 1):
         return True, A
     else:
         return False
