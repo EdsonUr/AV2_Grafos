@@ -27,18 +27,15 @@ def makeSet(numEdges):
     for i in range(numEdges):
         belongsTo.append(i)
 
-    print("BELONGS TO: ", belongsTo)
     return belongsTo
 
 def findSet(belongsTo, edge):
-    print("FIND SET: ", belongsTo[edge])
     return belongsTo[edge]
 
 def union(belongsTo, edge1, edge2):
     for i in range(len(belongsTo)):
         if belongsTo[i] == edge1:
             belongsTo[i] = edge2
-    print("UNION: ", belongsTo)
     
 def kruskal(numEdges, vectorEdgesWeight):
     A = []
@@ -47,13 +44,15 @@ def kruskal(numEdges, vectorEdgesWeight):
     belongsTo = makeSet(numEdges)
 
     for edge in sortedEdges:
-        print("EDGE: ", edge)
         if(findSet(belongsTo, edge[1]) != findSet(belongsTo, edge[2])):
             A.append(edge)
             union(belongsTo, findSet(belongsTo, edge[1]), findSet(belongsTo, edge[2]))
         
     print(belongsTo)
     if (len(set(belongsTo)) == 1):
+        print("Arestas da árvore")
+        for edge in A:
+            print(f'origem: {edge[1]}, destino: {edge[2]}, peso: {edge[0]}')
         return True, A
     else:
         return False
