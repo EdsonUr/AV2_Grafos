@@ -18,7 +18,7 @@ for vertice in range(primNumVertices):
             E.append([vertice, rowEdges.index(edge)])
             w[vertice][rowEdges.index(edge)] = edge
 
-r = int(primFile.readline()) - 1 ##ROOT
+r = int(primFile.readline())##ROOT
 G.append(V)
 G.append(E)
 
