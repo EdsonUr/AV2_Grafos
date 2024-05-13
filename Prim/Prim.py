@@ -66,9 +66,6 @@ def prim(G, w, r):
         print("Grafo desconexo")
     else:
         print(True)
-        for i in range(len(pi)):
-            if(pi[i] != -1):
-                pi[i] += 1
         print(pi)
      
 prim(G, w, r)
