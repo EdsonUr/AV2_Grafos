@@ -1,71 +1,61 @@
 import heapq
 primFile = open('prim.txt', 'r')
-primNumVertices = int(primFile.readline())
+primNumVertices = int(primFile.readline().strip())
 
-# G = [V, E] && w = matrix of weights && r = root
-G = [] ##GRAPH
-V = [] ##VERTICES
-E = [] ##EDGES
-w = [] ##WEIGHTS
+V = [i for i in range(primNumVertices)]
+E = []
+w = [[0] * primNumVertices for _ in range(primNumVertices)]
 
 for vertice in range(primNumVertices):
-    V.append(vertice)
-    w.append([0] * primNumVertices)
     rowEdges = [float(x) for x in primFile.readline().split()]
-
-    for edge in rowEdges:
+    for edge_index, edge in enumerate(rowEdges):
         if edge != 0:
-            E.append([vertice, rowEdges.index(edge)])
-            w[vertice][rowEdges.index(edge)] = edge
+            E.append([vertice, edge_index])
+            w[vertice][edge_index] = edge
 
-r = int(primFile.readline())##ROOT
-G.append(V)
-G.append(E)
+r = int(primFile.readline().strip())  # Raiz
+G = [V, E]
 
-##Key = menor valor possivel para chegarmos ao vertice
-##pi = vertice pai
+print(w)
 
-def Adj(G,u):
+
+def Adj(G, u):
     adj = []
     for edge in G[1]:
-        if(edge[0] == u):
+        if edge[0] == u:
             adj.append(edge[1])
+        elif edge[1] == u:
+            adj.append(edge[0])
     return adj
 
 def prim(G, w, r):
     V = G[0]
-    E = G[1]
-    key = []
-    pi = []
-
-    for vertice in V:
-        key.append(float('inf'))
-        pi.append(None)
-
+    key = [float('inf')] * len(V)
+    pi = [None] * len(V)
     key[r] = 0
     pi[r] = -1
+    
     Q = [(key[v], v) for v in range(len(V))]
     heapq.heapify(Q)
-    vertices_in_heap = set(v for key, v in Q)
+    position = {v: i for i, (_, v) in enumerate(Q)}
+    print(position)
 
     while Q:
-        u = heapq.heappop(Q) ##Vertice com menor key
-        vertices_in_heap.remove(u[1])
+        _, u = heapq.heappop(Q)
+        position.pop(u, None)
 
-        adj = Adj(G, u[1])
-        for v in adj:
-            if v in vertices_in_heap and w[u[1]][v] < key[v]:
-                pi[v] = u[1]
-                key[v] = w[u[1]][v]
+        for v in Adj(G, u):
+            if v in position and w[u][v] < key[v]:
+                key[v] = w[u][v]
+                pi[v] = u
+                Q = [(key[vertex], vertex) for _, vertex in Q if vertex in position]
+                heapq.heapify(Q)
 
-                print("PI: ",pi)
-                print("key: ",key)
-        
     if None in pi:
-        print(False)
+        print("FALSO")
         print("Grafo desconexo")
     else:
-        print(True)
+        print("VERDADEIRO")
         print(pi)
-     
+
 prim(G, w, r)
