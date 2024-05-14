@@ -16,8 +16,6 @@ for vertice in range(primNumVertices):
 r = int(primFile.readline().strip())  # Raiz
 G = [V, E]
 
-print(w)
-
 
 def Adj(G, u):
     adj = []
@@ -38,7 +36,6 @@ def prim(G, w, r):
     Q = [(key[v], v) for v in range(len(V))]
     heapq.heapify(Q)
     position = {v: i for i, (_, v) in enumerate(Q)}
-    print(position)
 
     while Q:
         _, u = heapq.heappop(Q)
