@@ -1,33 +1,26 @@
-bellFile = open('bf.txt', 'r')
-bellNumVertices = int(bellFile.readline())
+def read_input(filename):
+    with open(filename, 'r') as bellFile:
+        bellNumVertices = int(bellFile.readline().strip())
 
-G = []  # GRAPH
-V = []  # VERTICES
-E = []  # EDGES
-w = []  # WEIGHTS
+        V = list(range(bellNumVertices))
+        E = []
+        w = [[float('inf')] * bellNumVertices for _ in range(bellNumVertices)]
 
-for vertice in range(bellNumVertices):
-    V.append(vertice)
-    w.append([0] * bellNumVertices)
-    rowEdges = [float(x) for x in bellFile.readline().split()]
-
-    for idx, edge in enumerate(rowEdges):
-        if edge != 0:
-            E.append([vertice, idx])
-            w[vertice][idx] = edge
-
-s = int(bellFile.readline())  # ROOT
-G.append(V)
-G.append(E)
+        for vertice in range(bellNumVertices):
+            rowEdges = [float(x) for x in bellFile.readline().strip().split()]
+            for idx, edge in enumerate(rowEdges):
+                if edge != 0:
+                    E.append([vertice, idx])
+                    w[vertice][idx] = edge
+        
+        s = int(bellFile.readline().strip())
+    
+    return (V, E), w, s
 
 def iniciaOrigemUnica(G, s):
     V = G[0]
-    d = []
-    pi = []
-
-    for vertice in V:
-        d.append(1000000)
-        pi.append(None)
+    d = [1000000] * len(V)
+    pi = [None] * len(V)
 
     d[s] = 0
     pi[s] = -1
@@ -41,12 +34,23 @@ def relax(u, v, w, d, pi):
 
 def bellmanFord(G, w, s):
     d, pi = iniciaOrigemUnica(G, s)
-    for i in range(len(G[0]) - 1):
-        for edge in G[1]:
-            relax(edge[0], edge[1], w, d, pi)
-    for edge in G[1]:
-        if d[edge[1]] > d[edge[0]] + w[edge[0]][edge[1]]:
+    for _ in range(len(G[0]) - 1):
+        for u, v in G[1]:
+            relax(u, v, w, d, pi)
+    for u, v in G[1]:
+        if d[v] > d[u] + w[u][v]:
             return {'success': False}  # Indica a presença de um ciclo negativo
     return {'success': True, 'distances': d, 'predecessors': pi}
 
-print(bellmanFord(G, w, s))
+# Leia a entrada do arquivo
+G, w, s = read_input('bf.txt')
+
+# Execute o algoritmo de Bellman-Ford
+result = bellmanFord(G, w, s)
+
+# Imprima os resultados
+if result['success']:
+    print("Predecessores:", result['predecessors'])
+    print("Distâncias:", result['distances'])
+else:
+    print("O grafo contém um ciclo negativo.")
